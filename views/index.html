@@ -1,9 +1,208 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>DELI-VERY</title>
-    </head>
-    <body>
-        <h1>Hello World!!!</h1>
-    </body>
+
+<head>
+    <title>DELI-VERY</title>
+    <link rel="stylesheet" type="text/css" href="\css\style.css">
+    <link rel="stylesheet" href="css/deli-very.css">
+    <script type="text/javascript" src="js/menu.js"></script>
+    <script type="text/javascript" src="js/js_script.js"> </script>
+    <script src="https://vuejs.org/js/vue.js"></script>
+
+
+
+    <script src="/socket.io/socket.io.js" defer></script>
+    <script src="js/deli-very.js" defer></script>
+
+
+</head>
+
+<body class="background">
+    <main>
+        <div class="title">
+            <h1>Välkommen till BurgerOnline</h1>
+        </div>
+
+
+    </main>
+    <section class="selectburger">
+        <h2>Select burgers:</h2>
+        <div class="burgers" id="menu">
+
+            <div class="boxa">
+                <div id='b1'>
+                    <div v-for="burger in burgers" v-if="burger.name=='Neonburger'&&burger.stock>0">
+                        <h1> {{burger.name}}</h1>
+                        <img v-bind:src="burger.img">
+                        <li>{{burger.kCal}} kCal</li>
+                        <li v-if="burger.gluten==false&& burger.lactose==false"><span id="alrgy">Gluten and lactose
+                                free</span></li>
+                        <li v-if="burger.gluten==true">contains: <span id="alrgy">Gluten</span></li>
+                        <li v-if="burger.lactose==true">contains: <span id="alrgy">Lactose</span></li>
+                        <div>
+                            <input type="checkbox" value="Neonburger" id="brg1"></input>
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="boxb">
+                <div id='b2'>
+                    <div v-for="burger in burgers" v-if="burger.name=='Milkburger'&&burger.stock>0">
+                        <h1> {{burger.name}}</h1>
+                        <img v-bind:src="burger.img">
+                        <li>{{burger.kCal}} kCal</li>
+                        <li v-if="burger.gluten==false&& burger.lactose==false"><span id="alrgy">Gluten and lactose
+                                free</span></li>
+                        <li v-if="burger.gluten==true">contains: <span id="alrgy">Gluten</span></li>
+                        <li v-if="burger.lactose==true">contains: <span id="alrgy">Lactose</span></li>
+                        <div>
+                            <input type="checkbox" value="Milkburger" id="brg2"></input>
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+            <div class="boxc">
+                <div id='b3'>
+                    <div v-for="burger in burgers" v-if="burger.name=='Hamburger'&&burger.stock>0">
+                        <h1> {{burger.name}}</h1>
+                        <img v-bind:src="burger.img">
+                        <li>{{burger.kCal}} kCal</li>
+                        <li v-if="burger.gluten==false&& burger.lactose==false"><span id="alrgy">Gluten and lactose
+                                free</span></li>
+                        <li v-if="burger.gluten==true">contains: <span id="alrgy">Gluten</span></li>
+                        <li v-if="burger.lactose==true">contains: <span id="alrgy">Lactose</span></li>
+                        <div>
+                            <input type="checkbox" value="Hamburger" id="brg3"></input>
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </section>
+
+<div id="cusInfo">
+    <section class="customerinformation" >
+
+        <h3>Customer information</h3>
+        <p>
+            Delivery information:
+        </p>
+        <form>
+            <p>
+                <label for="firstname">First name</label><br>
+                <input type="text" id="firstname" name="fn" required="required" placeholder="First name" value="">
+            </p>
+            <p>
+                <label for="lastname">Last name</label><br>
+                <input type="text" id="lastname" name="ln" placeholder="Last name" value="">
+            </p>
+            <p>
+                <label for="email">Email</label><br>
+                <input type="email" id="email" name="em" required="required" placeholder="E-mail address" value="">
+            </p>
+
+            <p>
+                Gender<br>
+                <input type="radio" id="male" name="gender" value="Male">
+                <label for="male">Male</label><br>
+                <input type="radio" id="female" name="gender" value="Female">
+                <label for="female">Female</label><br>
+                <input type="radio" id="other" name="gender" value="other">
+                <label for="other">Other</label><br>
+
+
+            </p>
+            <p>
+                <label for="payment">Payment</label><br>
+                <select id="payment" name="pay">
+                    <option>MasterCard</option>
+                    <option>Visa</option>
+                    <option>PayPal</option>
+
+                </select>
+            </p>
+            <div class="view-box">
+                <div id="dots" v-on:click="displayOrder">
+                    <div v-for="order in orderList"
+                        v-bind:style="{ left: order.details.x + 'px', top: order.details.y + 'px'}">
+                        T
+                    </div>
+                </div>
+            </div>
+
+
+            <div>
+
+               
+
+
+
+
+
+
+            </div>
+
+
+
+        </form>
+    
+    </section>
+    <div>
+        <button v-on:click="cusInfo(); addOrder();" type="button"><img src="img\Burgerbutton.jpg"
+            style="height:20px;">Klart</button>
+    <div></div>
+    <h1>Order confirmation</h1>
+    <h2 style="font-size: 15px;">Customer confirmation:</h2>
+            <p>name: {{Info.name}}</p>
+            <p>email: {{Info.email}}</p>
+            <p>delivery to: <span v-if="orderList[0]">
+                x:{{orderList[0].details.x}},y:{{orderList[0].details.y}}
+            </span>
+
+            </p>
+            <p>gender: {{Info.gender}}</p>
+            <p>payment: {{Info.payment}}</p>
+
+
+    </div>
+    <h2 style="font-size: 15px;">Order confirmation:</h2>
+</div>
+  
+
+    <footer>
+        <hr>
+
+        © 2020 BurgerOnline
+
+    </footer>
+
+
+
+
+
+
+
+    <script type="text/javascript" src="js/vue_script.js">
+    </script>
+</body>
+
 </html>
